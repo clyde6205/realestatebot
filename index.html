@@ -253,12 +253,15 @@
             // Show typing indicator
             showTyping();
 
-            // Simulate OpenAI API call (replace with real API call)
-            setTimeout(() => {
+            // Real OpenAI API call
+            try {
+                const response = await callOpenAI(message);
                 hideTyping();
-                const response = generateAIResponse(message);
                 addMessage(response, 'bot');
-            }, 2000);
+            } catch (error) {
+                hideTyping();
+                addMessage("I'm having trouble connecting to my AI brain. Please check your API key in Settings.", 'bot');
+            }
         }
 
         function addMessage(message, sender) {
@@ -304,26 +307,6 @@
             if (typingIndicator) {
                 typingIndicator.remove();
             }
-        }
-
-        // AI Response Generator (This would connect to OpenAI API)
-        function generateAIResponse(userMessage) {
-            // This is a simplified example - in production, this would call OpenAI API
-            const responses = {
-                "find": "🏠 I found several properties matching your criteria! Based on your search, here are some options:\n\n• 3BR/2BA Colonial - $485k in Oak Park\n• 4BR/3BA Modern - $520k in Riverside\n• 2BR/2BA Condo - $395k Downtown\n\nWould you like me to schedule virtual tours or get more details on any of these properties?",
-                "calculate": "💰 For a mortgage calculation, I'll need a few details:\n\n• Purchase price\n• Down payment amount\n• Interest rate (current avg: 7.2%)\n• Loan term (15 or 30 years)\n\nFor example: $500k home with 20% down ($100k) at 7.2% for 30 years = $2,706/month\n\nWhat's your specific scenario?",
-                "market": "📊 Current market analysis for Miami, FL:\n\n• Median home price: $565k (↑8.2% YoY)\n• Average days on market: 28 days\n• Inventory: 2.1 months (Seller's market)\n• Best neighborhoods: Coral Gables, Coconut Grove, Brickell\n\nThis is a great time to sell! Would you like a detailed CMA for your property?",
-                "schedule": "📅 I'd be happy to schedule a showing! To get started:\n\n1. Which property interests you most?\n2. Preferred viewing times?\n3. Any specific features you want to see?\n\nI can coordinate with the listing agent and send you confirmation details. What works best for your schedule?"
-            };
-
-            const lowerMessage = userMessage.toLowerCase();
-            for (let key in responses) {
-                if (lowerMessage.includes(key)) {
-                    return responses[key];
-                }
-            }
-
-            return `🤖 Thanks for your question! As your AI real estate assistant, I can help you with:\n\n• Finding properties that match your criteria\n• Calculating mortgage payments and affordability\n• Market analysis and pricing strategies\n• Scheduling property showings\n• Answering questions about buying/selling process\n\nWhat specific aspect would you like to explore?`;
         }
 
         // Copy Embed Code
